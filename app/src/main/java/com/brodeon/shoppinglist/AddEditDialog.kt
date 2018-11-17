@@ -18,6 +18,7 @@ class AddEditDialog : DialogFragment() {
 
         const val DIALOG_ID = "dialogId"
         const val LIST_NAME_ADD_DIALOG = "listName"
+        const val ITEM_NAME_ADD_DIALOG = "itemName"
     }
 
     interface OnDialogResponse {
@@ -42,9 +43,18 @@ class AddEditDialog : DialogFragment() {
             .setView(view)
             .setMessage("Add a new shopping list")
             .setPositiveButton("Add", DialogInterface.OnClickListener {dialog, which ->
-                val listName = editText.text.toString()
-                bundle?.putString(LIST_NAME_ADD_DIALOG, listName)
-                onDialogResponseListener.onPositiveClicked(dialogId, bundle)
+                when(dialogId) {
+                    ADD_LIST_DIALOG_ID -> {
+                        val listName = editText.text.toString()
+                        bundle.putString(LIST_NAME_ADD_DIALOG, listName)
+                        onDialogResponseListener.onPositiveClicked(dialogId, bundle)
+                    }
+                    ADD_ITEM_DIALOG_ID -> {
+                        val itemName = editText.text.toString()
+                        bundle.putString(ITEM_NAME_ADD_DIALOG, itemName)
+                        onDialogResponseListener.onPositiveClicked(dialogId, bundle)
+                    }
+                }
             })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, which ->
                 onDialogResponseListener.onNegaiveClicked(dialogId, bundle)
