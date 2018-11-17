@@ -4,10 +4,12 @@ package com.brodeon.shoppinglist
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_LIST_DIALOG_ID
 import com.brodeon.shoppinglist.data.ShoppingList
 import com.brodeon.shoppinglist.data.ShoppingListViewModel
@@ -24,6 +26,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.your_shopping_lists)
         return inflater.inflate(R.layout.fragment_shopping, container, false)
     }
 
@@ -32,11 +35,13 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 
         val shoppingListRV = rv_shopping_lists
         shoppingListAdapter = ShoppingListsRVAdapter(this)
-        shoppingListRV.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 2)
+        shoppingListRV.layoutManager = GridLayoutManager(context, 2)
         shoppingListRV.adapter = shoppingListAdapter
 
         setViewModels()
         setActivityFabOnClickListener()
+
+        showFab()
     }
 
     private fun setActivityFabOnClickListener() {
@@ -49,6 +54,14 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
             addEditDialog.arguments = bundle
             addEditDialog.attachFragment(this)
             addEditDialog.show(activity?.supportFragmentManager, null)
+        }
+    }
+
+    private fun showFab() {
+        val fab = activity?.fab
+        if (fab?.tag == FabState.HIDDEN) {
+            fab.animate().translationYBy(-250f).duration = 250
+            fab.tag = FabState.VISIBLE
         }
     }
 
@@ -71,6 +84,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
     override fun onListClicked(shoppingList: ShoppingList, view: View) {
         val bundle = Bundle()
         bundle.putInt(ShoppingItemsListFragment.LIST_ID, shoppingList.listId)
+        bundle.putString(ShoppingItemsListFragment.LIST_NAME, shoppingList.listName)
 
         Navigation.findNavController(view).navigate(R.id.toItems, bundle)
     }
