@@ -11,4 +11,8 @@ class ShoppingListItemViewModel(application: Application) : AndroidViewModel(app
     fun shoppingListItems(listId: Int): LiveData<List<ShoppingListItem>> {
         return repository.shoppingListItems(listId)
     }
+
+    fun insertShoppingListItem(shoppingListItem: ShoppingListItem) {
+        repository.insertShoppingListItem(shoppingListItem)
+    }
 }

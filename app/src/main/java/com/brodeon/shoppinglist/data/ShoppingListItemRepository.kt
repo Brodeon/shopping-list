@@ -2,6 +2,7 @@ package com.brodeon.shoppinglist.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import org.jetbrains.anko.doAsync
 
 class ShoppingListItemRepository(application: Application) {
 
@@ -10,5 +11,11 @@ class ShoppingListItemRepository(application: Application) {
 
     fun shoppingListItems(listId: Int): LiveData<List<ShoppingListItem>> {
         return shoppingListItemDao.getListItems(listId)
+    }
+
+    fun insertShoppingListItem(shoppingListItem: ShoppingListItem) {
+        doAsync {
+            shoppingListItemDao.insert(shoppingListItem)
+        }
     }
 }
