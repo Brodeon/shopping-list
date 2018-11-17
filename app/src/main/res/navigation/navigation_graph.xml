@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation_graph"
+            app:startDestination="@id/shoppingFragment">
+
+    <fragment android:id="@+id/shoppingFragment" android:name="com.brodeon.shoppinglist.ShoppingFragment"
+              android:label="fragment_shopping" tools:layout="@layout/fragment_shopping">
+        <action android:id="@+id/toItems"
+                app:destination="@id/shoppingItemsListFragment"/>
+    </fragment>
+    <fragment android:id="@+id/shoppingItemsListFragment"
+              android:name="com.brodeon.shoppinglist.ShoppingItemsListFragment"
+              android:label="fragment_shopping_items_list" tools:layout="@layout/fragment_shopping_items_list"/>
+</navigation>
