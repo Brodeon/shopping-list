@@ -30,6 +30,21 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         return inflater.inflate(R.layout.fragment_shopping, container, false)
     }
 
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        shoppingListAdapter.onLongShoppingList?.let {
+            when(item?.itemId) {
+                R.id.edit_list_cvi -> {
+                    Log.d("ShoppingFr", "onContextItemSelected: onEditClicked, list name = ${it.listName}")
+                }
+                R.id.delete_list_cvi -> {
+                    Log.d("ShoppingFr", "onContextItemSelected: onDeleteClicked")
+                }
+            }
+            return super.onContextItemSelected(item)
+        }
+        return super.onContextItemSelected(item)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
