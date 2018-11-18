@@ -18,4 +18,10 @@ class ShoppingListItemRepository(application: Application) {
             shoppingListItemDao.insert(shoppingListItem)
         }
     }
+
+    fun updateIsBoughtItem(shoppingListItem: ShoppingListItem) {
+        doAsync {
+            shoppingListItemDao.updateIsBoughtItem(shoppingListItem.isBought, shoppingListItem.itemId)
+        }
+    }
 }

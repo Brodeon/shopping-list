@@ -1,19 +1,23 @@
 package com.brodeon.shoppinglist
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import kotlinx.android.synthetic.main.shopping_list_item.view.*
 
-class ShoppingItemsRVAdapter(private var listener: OnItemLongClick)
+class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
     : RecyclerView.Adapter<ShoppingItemsRVAdapter.ItemsViewHolder>(){
 
     private var itemsList: List<ShoppingListItem>? = null
 
-    interface OnItemLongClick {
+    interface OnItemClicked {
         fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem)
+        fun onCheckboxChanged(position: Int, shoppingListItem: ShoppingListItem, isChecked: Boolean)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ItemsViewHolder {
@@ -39,6 +43,12 @@ class ShoppingItemsRVAdapter(private var listener: OnItemLongClick)
             val item = it[position]
 
             viewHolder.isBoughtCheckBox.isChecked = item.isBought
+
+            viewHolder.isBoughtCheckBox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                Log.d("itemsAdapter", "isChecked = $isChecked")
+                listener.onCheckboxChanged(position, item, isChecked)
+            })
+
             viewHolder.itemDescription.text = item.itemText
 
             viewHolder.view.setOnLongClickListener {

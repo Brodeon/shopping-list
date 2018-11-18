@@ -14,7 +14,7 @@ import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_shopping_items_list.*
 
-class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemLongClick, AddEditDialog.OnDialogResponse {
+class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClicked, AddEditDialog.OnDialogResponse {
 
     private lateinit var shoppingItemsAdapter: ShoppingItemsRVAdapter
     private lateinit var itemsViewModel: ShoppingListItemViewModel
@@ -41,19 +41,30 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemLongC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        configureRecycleView()
+        setViewModels()
+        hideFab()
+    }
+
+    private fun configureRecycleView() {
         val shoppingItemsRV = rv_shopping_items_list
         shoppingItemsAdapter = ShoppingItemsRVAdapter(this)
 
         shoppingItemsRV.adapter = shoppingItemsAdapter
         shoppingItemsRV.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
+//        val horizontalItemDecorator = DividerItemDecoration(shoppingItemsRV.context, DividerItemDecoration.HORIZONTAL)
+//        val horizontalLine = ContextCompat.getDrawable(context!!, R.drawable.horizontal_divider)
+//        horizontalItemDecorator.setDrawable(horizontalLine!!)
+//
+//        shoppingItemsRV.addItemDecoration(horizontalItemDecorator)
+    }
+
+    private fun setViewModels() {
         itemsViewModel = ViewModelProviders.of(this).get(ShoppingListItemViewModel::class.java)
         itemsViewModel.shoppingListItems(listId!!).observe(this, Observer {
             shoppingItemsAdapter.updateList(it!!)
         })
-
-        hideFab()
-        //TODO fab transition away the screen
     }
 
     private fun hideFab() {
@@ -88,6 +99,11 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemLongC
 
     override fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem) {
         print(position)
+    }
+
+    override fun onCheckboxChanged(position: Int, shoppingListItem: ShoppingListItem, isChecked: Boolean) {
+        shoppingListItem.isBought = isChecked
+        itemsViewModel.updateIsBoughtItem(shoppingListItem)
     }
 
     override fun onPositiveClicked(dialogId: Int?, bundle: Bundle?) {

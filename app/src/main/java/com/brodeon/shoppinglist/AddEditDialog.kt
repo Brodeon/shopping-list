@@ -1,12 +1,23 @@
 package com.brodeon.shoppinglist
 
+import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 class AddEditDialog : DialogFragment() {
 
@@ -38,6 +49,7 @@ class AddEditDialog : DialogFragment() {
         val inflater = activity?.layoutInflater
         val view = inflater?.inflate(R.layout.add_edit_dialog, null)
         val editText: EditText = view!!.findViewById(R.id.add_edit_ed)
+        editText.hint = "List name"
 
         val alertDialogBuilder = AlertDialog.Builder(context)
             .setView(view)
@@ -59,7 +71,37 @@ class AddEditDialog : DialogFragment() {
             .setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, which ->
                 onDialogResponseListener.onNegaiveClicked(dialogId, bundle)
             })
+        val alertDialog = alertDialogBuilder.create()
 
-        return alertDialogBuilder.create()
+        alertDialog.setOnShowListener(DialogInterface.OnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        })
+
+        editText.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                //not implemented
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //not implemented
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+                if (s != null) {
+                    if (s.isNotEmpty()) {
+                        positiveButton.isEnabled = true
+                        return
+                    }
+                }
+
+                positiveButton.isEnabled = false
+            }
+        })
+
+        return alertDialog
     }
+
+
 }

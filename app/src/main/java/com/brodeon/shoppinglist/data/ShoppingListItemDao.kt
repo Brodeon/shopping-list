@@ -26,4 +26,7 @@ interface ShoppingListItemDao {
 
     @Query("SELECT * FROM shopping_list_items WHERE itemId = :itemId")
     fun getItem(itemId: Int): ShoppingListItem
+
+    @Query("UPDATE shopping_list_items SET isBought = :isBought WHERE itemId = :itemId")
+    fun updateIsBoughtItem(isBought : Boolean, itemId: Int)
 }

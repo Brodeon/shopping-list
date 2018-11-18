@@ -15,4 +15,8 @@ class ShoppingListItemViewModel(application: Application) : AndroidViewModel(app
     fun insertShoppingListItem(shoppingListItem: ShoppingListItem) {
         repository.insertShoppingListItem(shoppingListItem)
     }
+
+    fun updateIsBoughtItem(shoppingListItem: ShoppingListItem) {
+        repository.updateIsBoughtItem(shoppingListItem)
+    }
 }

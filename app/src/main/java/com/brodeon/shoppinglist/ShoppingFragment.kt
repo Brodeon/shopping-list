@@ -1,14 +1,18 @@
 package com.brodeon.shoppinglist
 
 
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_LIST_DIALOG_ID
 import com.brodeon.shoppinglist.data.ShoppingList
@@ -48,15 +52,24 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val shoppingListRV = rv_shopping_lists
-        shoppingListAdapter = ShoppingListsRVAdapter(this)
-        shoppingListRV.layoutManager = GridLayoutManager(context, 2)
-        shoppingListRV.adapter = shoppingListAdapter
-
+        configureRecycleView()
         setViewModels()
         setActivityFabOnClickListener()
 
         showFab()
+    }
+
+    private fun configureRecycleView() {
+        val shoppingListRV = rv_shopping_lists
+        shoppingListAdapter = ShoppingListsRVAdapter(this)
+
+        if (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+            shoppingListRV.layoutManager = GridLayoutManager(context, 2)
+        } else {
+            shoppingListRV.layoutManager = GridLayoutManager(context, 3)
+        }
+
+        shoppingListRV.adapter = shoppingListAdapter
     }
 
     private fun setActivityFabOnClickListener() {
@@ -68,6 +81,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 
             addEditDialog.arguments = bundle
             addEditDialog.attachFragment(this)
+
             addEditDialog.show(activity?.supportFragmentManager, null)
         }
     }
