@@ -41,7 +41,8 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
                     Log.d("ShoppingFr", "onContextItemSelected: onEditClicked, list name = ${it.listName}")
                 }
                 R.id.delete_list_cvi -> {
-                    Log.d("ShoppingFr", "onContextItemSelected: onDeleteClicked")
+                    Log.d("ShoppingFr", "onContextItemSelected: onDeleteClicked, list name = ${it.listName}")
+                    listsViewModel.deleteList(it)
                 }
             }
             return super.onContextItemSelected(item)
@@ -129,7 +130,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         }
     }
 
-    override fun onNegaiveClicked(dialogId: Int?, bundle: Bundle?) {
+    override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_LIST_DIALOG_ID -> {
                 //do nothing

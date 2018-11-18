@@ -15,4 +15,8 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
     fun insertShoppingList(shoppingList: ShoppingList) {
         repository.insertShoppingList(shoppingList)
     }
+
+    fun deleteList(shoppingList: ShoppingList) {
+        repository.deleteList(shoppingList)
+    }
 }

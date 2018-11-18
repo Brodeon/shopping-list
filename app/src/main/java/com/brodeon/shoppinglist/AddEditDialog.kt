@@ -1,22 +1,13 @@
 package com.brodeon.shoppinglist
 
-import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
-import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-
 
 
 class AddEditDialog : DialogFragment() {
@@ -34,7 +25,7 @@ class AddEditDialog : DialogFragment() {
 
     interface OnDialogResponse {
         fun onPositiveClicked(dialogId: Int?, bundle: Bundle?)
-        fun onNegaiveClicked(dialogId: Int?, bundle: Bundle?)
+        fun onNegativeClicked(dialogId: Int?, bundle: Bundle?)
     }
 
     fun attachFragment(onDialogResponseListener: OnDialogResponse) {
@@ -69,7 +60,7 @@ class AddEditDialog : DialogFragment() {
                 }
             })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, which ->
-                onDialogResponseListener.onNegaiveClicked(dialogId, bundle)
+                onDialogResponseListener.onNegativeClicked(dialogId, bundle)
             })
         val alertDialog = alertDialogBuilder.create()
 

@@ -1,11 +1,10 @@
 package com.brodeon.shoppinglist
 
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import kotlinx.android.synthetic.main.shopping_list_item.view.*
@@ -14,6 +13,8 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
     : RecyclerView.Adapter<ShoppingItemsRVAdapter.ItemsViewHolder>(){
 
     private var itemsList: List<ShoppingListItem>? = null
+    var onLongShoppingListItem: ShoppingListItem? = null
+
 
     interface OnItemClicked {
         fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem)
@@ -52,15 +53,28 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
             viewHolder.itemDescription.text = item.itemText
 
             viewHolder.view.setOnLongClickListener {
-                listener.onItemLongClicked(position, item)
-                true
+                onLongShoppingListItem = item
+                false
             }
         }
     }
 
-    inner class ItemsViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-        var view = itemView
-        var itemDescription = itemView.item_description_tv!!
-        var isBoughtCheckBox = itemView.is_bought_cb!!
+    inner class ItemsViewHolder : androidx.recyclerview.widget.RecyclerView.ViewHolder, View.OnCreateContextMenuListener {
+        var view: View
+        var itemDescription: TextView
+        var isBoughtCheckBox: CheckBox
+
+        constructor(itemView: View) : super(itemView) {
+            view = itemView
+            itemDescription = itemView.item_description_tv!!
+            isBoughtCheckBox = itemView.is_bought_cb!!
+
+            view.setOnCreateContextMenuListener(this)
+        }
+
+        override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+            menu?.add(Menu.NONE, R.id.edit_item_cvi, Menu.NONE, "Edit item")
+            menu?.add(Menu.NONE, R.id.delete_item_cvi, Menu.NONE, "Delete item")
+        }
     }
 }

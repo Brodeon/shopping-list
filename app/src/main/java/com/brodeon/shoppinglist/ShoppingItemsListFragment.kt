@@ -46,6 +46,25 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         hideFab()
     }
 
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        shoppingItemsAdapter.onLongShoppingListItem?.let {
+            when(item?.itemId) {
+                R.id.edit_item_cvi -> {
+                    Log.d("ItemsFragment", "onContextItemSelected: onEditClicked, list name = ${it.itemText}")
+                }
+
+                R.id.delete_item_cvi -> {
+                    Log.d("ItemsFragment", "onContextItemSelected: onDeleteClicked, list name = ${it.itemText}")
+                    itemsViewModel.deleteItem(it)
+                }
+            }
+            return super.onContextItemSelected(item)
+
+        }
+
+        return super.onContextItemSelected(item)
+    }
+
     private fun configureRecycleView() {
         val shoppingItemsRV = rv_shopping_items_list
         shoppingItemsAdapter = ShoppingItemsRVAdapter(this)
@@ -116,7 +135,7 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         }
     }
 
-    override fun onNegaiveClicked(dialogId: Int?, bundle: Bundle?) {
+    override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_ITEM_DIALOG_ID -> {
                 //do nothing

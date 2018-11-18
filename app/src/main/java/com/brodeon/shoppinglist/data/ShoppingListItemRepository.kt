@@ -24,4 +24,10 @@ class ShoppingListItemRepository(application: Application) {
             shoppingListItemDao.updateIsBoughtItem(shoppingListItem.isBought, shoppingListItem.itemId)
         }
     }
+
+    fun deleteItem(shoppingListItem: ShoppingListItem) {
+        doAsync {
+            shoppingListItemDao.deleteItem(shoppingListItem)
+        }
+    }
 }

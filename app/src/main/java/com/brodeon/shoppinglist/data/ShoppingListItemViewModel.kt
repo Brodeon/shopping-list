@@ -19,4 +19,8 @@ class ShoppingListItemViewModel(application: Application) : AndroidViewModel(app
     fun updateIsBoughtItem(shoppingListItem: ShoppingListItem) {
         repository.updateIsBoughtItem(shoppingListItem)
     }
+
+    fun deleteItem(shoppingListItem: ShoppingListItem) {
+        repository.deleteItem(shoppingListItem)
+    }
 }

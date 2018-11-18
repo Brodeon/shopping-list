@@ -61,6 +61,7 @@ class ShoppingListsRVAdapter(private var listener: OnListLongClicked)
         constructor(itemView: View) : super(itemView) {
             listName = itemView.listname_tv!!
             view = itemView
+
             itemView.setOnCreateContextMenuListener(this)
         }
 

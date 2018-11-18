@@ -19,4 +19,11 @@ class ShoppingListRepository(application: Application){
             shoppingListDao.insert(shoppingList)
         }
     }
+
+    fun deleteList(shoppingList: ShoppingList) {
+        doAsync {
+            shoppingListDao.deleteList(shoppingList)
+        }
+    }
+
 }
