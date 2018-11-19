@@ -8,13 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_ITEM_DIALOG_ID
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_shopping_items_list.*
 
-class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClicked, AddEditDialog.OnDialogResponse {
+class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClicked, AddEditDialog.OnDialogResponse, ItemsItemHelper.OnSwipeListener {
 
     private lateinit var shoppingItemsAdapter: ShoppingItemsRVAdapter
     private lateinit var itemsViewModel: ShoppingListItemViewModel
@@ -72,11 +73,14 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         shoppingItemsRV.adapter = shoppingItemsAdapter
         shoppingItemsRV.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
-//        val horizontalItemDecorator = DividerItemDecoration(shoppingItemsRV.context, DividerItemDecoration.HORIZONTAL)
-//        val horizontalLine = ContextCompat.getDrawable(context!!, R.drawable.horizontal_divider)
-//        horizontalItemDecorator.setDrawable(horizontalLine!!)
-//
-//        shoppingItemsRV.addItemDecoration(horizontalItemDecorator)
+        val itemsItemHelper = ItemsItemHelper(0, ItemTouchHelper.LEFT, this)
+        ItemTouchHelper(itemsItemHelper).attachToRecyclerView(shoppingItemsRV)
+    }
+
+    override fun onSwipe(position: Int) {
+        shoppingItemsAdapter.itemFromPosition(position)?.let {
+            itemsViewModel.deleteItem(it)
+        }
     }
 
     private fun setViewModels() {

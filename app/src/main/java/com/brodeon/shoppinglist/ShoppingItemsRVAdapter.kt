@@ -39,6 +39,10 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
         notifyItemChanged(position)
     }
 
+    fun itemFromPosition(position: Int): ShoppingListItem? {
+        return itemsList?.get(position)
+    }
+
     override fun onBindViewHolder(viewHolder: ItemsViewHolder, position: Int) {
         itemsList?.let {
             val item = it[position]
@@ -63,11 +67,15 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
         var view: View
         var itemDescription: TextView
         var isBoughtCheckBox: CheckBox
+        var foregroundView: View
+        var backgroundView: View
 
         constructor(itemView: View) : super(itemView) {
             view = itemView
             itemDescription = itemView.item_description_tv!!
             isBoughtCheckBox = itemView.is_bought_cb!!
+            foregroundView = itemView.findViewById(R.id.foreground_view)
+            backgroundView = itemView.findViewById(R.id.background_view)
 
             view.setOnCreateContextMenuListener(this)
         }
