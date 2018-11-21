@@ -8,9 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_ITEM_DIALOG_ID
 import com.brodeon.shoppinglist.AddEditDialog.Companion.EDIT_ITEM_DIALOG_ID
+import com.brodeon.shoppinglist.R.id.nav_host_fragment
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -137,6 +139,11 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
 
                 addEditDialog.attachFragment(this)
                 addEditDialog.show(activity?.supportFragmentManager, null)
+            }
+
+            android.R.id.home -> {
+                val navgationFragmentView: View? = activity?.findViewById(R.id.nav_host_fragment)
+                Navigation.findNavController(navgationFragmentView!!).navigateUp()
             }
         }
 
