@@ -1,18 +1,15 @@
 package com.brodeon.shoppinglist
 
 
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_LIST_DIALOG_ID
 import com.brodeon.shoppinglist.AddEditDialog.Companion.EDIT_LIST_DIALOG_ID
@@ -130,10 +127,10 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         print(position)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.shopping_lists_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+//        inflater?.inflate(R.menu.shopping_lists_menu, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
 
     override fun onListClicked(shoppingList: ShoppingList, view: View) {
         val bundle = Bundle()
@@ -156,7 +153,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
                 val listName = bundle?.getString(AddEditDialog.ELEMENT_STRING)
                 val listId = bundle?.getInt(AddEditDialog.ELEMENT_EDIT_ID)
                 listsViewModel.updateListName(listName!!, listId!!)
-                shoppingListAdapter.onLongShoppingList?.also { it.listName = listName!! }
+                shoppingListAdapter.onLongShoppingList?.also { it.listName = listName }
                 shoppingListAdapter.updateListElement()
             }
         }

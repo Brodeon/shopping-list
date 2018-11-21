@@ -12,7 +12,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_ITEM_DIALOG_ID
 import com.brodeon.shoppinglist.AddEditDialog.Companion.EDIT_ITEM_DIALOG_ID
-import com.brodeon.shoppinglist.R.id.nav_host_fragment
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ItemsItemHelper(dragDirs: Int, swipeDirs: Int, onSwipeListener: OnSwipeListener) :
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
 
-    var listener: OnSwipeListener = onSwipeListener
+    private var listener: OnSwipeListener = onSwipeListener
 
     interface OnSwipeListener {
         fun onSwipe(position: Int)

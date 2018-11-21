@@ -22,8 +22,6 @@ class AddEditDialog : DialogFragment() {
         const val EDIT_ITEM_DIALOG_ID = 4
 
         const val DIALOG_ID = "dialogId"
-        const val LIST_NAME_ADD_DIALOG = "listName"
-        const val ITEM_NAME_ADD_DIALOG = "itemName"
         const val ELEMENT_STRING = "elementString"
         const val DIALOG_MESSAGE = "message"
         const val EDITTEXT_HINT = "hint"
@@ -50,7 +48,7 @@ class AddEditDialog : DialogFragment() {
         val editText: EditText = view!!.findViewById(R.id.add_edit_ed)
 
         val positiveBtnString = bundle?.getString(POSITIVE_BTN_STRING)
-        var message = bundle?.getString(DIALOG_MESSAGE)
+        val message = bundle?.getString(DIALOG_MESSAGE)
 
         bundle?.getString(ELEMENT_STRING)?.let {
             editText.setText(it, TextView.BufferType.EDITABLE)
