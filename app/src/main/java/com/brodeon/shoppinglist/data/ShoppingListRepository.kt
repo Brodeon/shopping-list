@@ -26,4 +26,10 @@ class ShoppingListRepository(application: Application){
         }
     }
 
+    fun updateListName(listName: String, listId: Int) {
+        doAsync {
+            shoppingListDao.updateListName(listName, listId)
+        }
+    }
+
 }

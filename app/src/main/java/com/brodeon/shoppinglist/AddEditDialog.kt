@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 
 
@@ -17,10 +18,17 @@ class AddEditDialog : DialogFragment() {
     companion object {
         const val ADD_LIST_DIALOG_ID = 1
         const val ADD_ITEM_DIALOG_ID = 2
+        const val EDIT_LIST_DIALOG_ID = 3
+        const val EDIT_ITEM_DIALOG_ID = 4
 
         const val DIALOG_ID = "dialogId"
         const val LIST_NAME_ADD_DIALOG = "listName"
         const val ITEM_NAME_ADD_DIALOG = "itemName"
+        const val ELEMENT_STRING = "elementString"
+        const val DIALOG_MESSAGE = "message"
+        const val EDITTEXT_HINT = "hint"
+        const val ELEMENT_EDIT_ID = "elementId"
+        const val POSITIVE_BTN_STRING = "positiveString"
     }
 
     interface OnDialogResponse {
@@ -40,24 +48,23 @@ class AddEditDialog : DialogFragment() {
         val inflater = activity?.layoutInflater
         val view = inflater?.inflate(R.layout.add_edit_dialog, null)
         val editText: EditText = view!!.findViewById(R.id.add_edit_ed)
-        editText.hint = "List name"
+
+        val positiveBtnString = bundle?.getString(POSITIVE_BTN_STRING)
+        var message = bundle?.getString(DIALOG_MESSAGE)
+
+        bundle?.getString(ELEMENT_STRING)?.let {
+            editText.setText(it, TextView.BufferType.EDITABLE)
+        }
+
+        editText.hint = bundle?.getString(EDITTEXT_HINT)
 
         val alertDialogBuilder = AlertDialog.Builder(context)
             .setView(view)
-            .setMessage("Add a new shopping list")
-            .setPositiveButton("Add", DialogInterface.OnClickListener {dialog, which ->
-                when(dialogId) {
-                    ADD_LIST_DIALOG_ID -> {
-                        val listName = editText.text.toString()
-                        bundle.putString(LIST_NAME_ADD_DIALOG, listName)
-                        onDialogResponseListener.onPositiveClicked(dialogId, bundle)
-                    }
-                    ADD_ITEM_DIALOG_ID -> {
-                        val itemName = editText.text.toString()
-                        bundle.putString(ITEM_NAME_ADD_DIALOG, itemName)
-                        onDialogResponseListener.onPositiveClicked(dialogId, bundle)
-                    }
-                }
+            .setMessage(message)
+            .setPositiveButton(positiveBtnString, DialogInterface.OnClickListener {dialog, which ->
+                val listName = editText.text.toString()
+                bundle?.putString(ELEMENT_STRING, listName)
+                onDialogResponseListener.onPositiveClicked(dialogId, bundle)
             })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, which ->
                 onDialogResponseListener.onNegativeClicked(dialogId, bundle)

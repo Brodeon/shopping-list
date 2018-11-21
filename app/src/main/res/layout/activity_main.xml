@@ -15,7 +15,7 @@
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="47dp"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
@@ -29,7 +29,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:fabCustomSize="44dp"
-            app:srcCompat="@android:drawable/ic_input_add" android:layout_height="wrap_content"
+            app:srcCompat="@drawable/add_shopping_cart_white_18dp"
+            android:layout_height="wrap_content"
             app:backgroundTint="@color/colorPrimaryDark"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

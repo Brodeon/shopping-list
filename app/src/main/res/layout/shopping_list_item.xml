@@ -33,16 +33,22 @@
                     android:id="@+id/item_description_tv"
                     app:layout_constraintBaseline_toBaselineOf="@+id/is_bought_cb"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="16dp" app:layout_constraintEnd_toStartOf="@+id/is_bought_cb"
-                    android:layout_marginEnd="16dp" tools:text="Example text 123" android:textSize="18sp"/>
+                    android:layout_marginStart="19dp"
+                    app:layout_constraintEnd_toStartOf="@+id/is_bought_cb"
+                    android:layout_marginEnd="16dp"
+                    tools:text="Example text 123" android:textSize="18sp"/>
             <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/is_bought_cb" app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/is_bought_cb"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="24dp" app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="24dp"
-            />
+                    android:layout_marginTop="24dp"
+                    android:scaleX="1.4"
+                    android:scaleY="1.4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="24dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

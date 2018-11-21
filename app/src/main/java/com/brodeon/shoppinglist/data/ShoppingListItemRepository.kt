@@ -30,4 +30,10 @@ class ShoppingListItemRepository(application: Application) {
             shoppingListItemDao.deleteItem(shoppingListItem)
         }
     }
+
+    fun updateItemText(itemText: String, itemId: Int) {
+        doAsync {
+            shoppingListItemDao.updateItemText(itemText, itemId)
+        }
+    }
 }

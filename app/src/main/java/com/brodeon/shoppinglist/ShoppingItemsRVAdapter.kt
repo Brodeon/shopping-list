@@ -35,8 +35,8 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
         notifyDataSetChanged()
     }
 
-    fun updateListElement(position: Int) {
-        notifyItemChanged(position)
+    fun updateItem() {
+        notifyDataSetChanged()
     }
 
     fun itemFromPosition(position: Int): ShoppingListItem? {

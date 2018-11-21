@@ -29,4 +29,7 @@ interface ShoppingListItemDao {
 
     @Query("UPDATE shopping_list_items SET isBought = :isBought WHERE itemId = :itemId")
     fun updateIsBoughtItem(isBought : Boolean, itemId: Int)
+
+    @Query("UPDATE shopping_list_items SET itemText = :itemText WHERE itemId = :itemId")
+    fun updateItemText(itemText: String, itemId: Int)
 }

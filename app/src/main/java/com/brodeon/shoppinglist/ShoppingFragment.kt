@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_LIST_DIALOG_ID
+import com.brodeon.shoppinglist.AddEditDialog.Companion.EDIT_LIST_DIALOG_ID
 import com.brodeon.shoppinglist.data.ShoppingList
 import com.brodeon.shoppinglist.data.ShoppingListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +31,11 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.your_shopping_lists)
+        val supportActionBar = (activity as AppCompatActivity).supportActionBar
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.title = getString(R.string.your_shopping_lists)
+
         return inflater.inflate(R.layout.fragment_shopping, container, false)
     }
 
@@ -39,6 +44,21 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
             when(item?.itemId) {
                 R.id.edit_list_cvi -> {
                     Log.d("ShoppingFr", "onContextItemSelected: onEditClicked, list name = ${it.listName}")
+
+                    val addEditDialog = AddEditDialog()
+
+                    val bundle = Bundle()
+                    bundle.putInt(AddEditDialog.DIALOG_ID, AddEditDialog.EDIT_LIST_DIALOG_ID)
+                    bundle.putString(AddEditDialog.DIALOG_MESSAGE, getString(R.string.dialog_message_edit_list))
+                    bundle.putString(AddEditDialog.EDITTEXT_HINT, getString(R.string.edittext_list_hint))
+                    bundle.putString(AddEditDialog.ELEMENT_STRING, it.listName)
+                    bundle.putString(AddEditDialog.POSITIVE_BTN_STRING, getString(R.string.edit))
+                    bundle.putInt(AddEditDialog.ELEMENT_EDIT_ID, it.listId)
+
+                    addEditDialog.arguments = bundle
+                    addEditDialog.attachFragment(this)
+
+                    addEditDialog.show(activity?.supportFragmentManager, null)
                 }
                 R.id.delete_list_cvi -> {
                     Log.d("ShoppingFr", "onContextItemSelected: onDeleteClicked, list name = ${it.listName}")
@@ -79,6 +99,10 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 
             val bundle = Bundle()
             bundle.putInt(AddEditDialog.DIALOG_ID, AddEditDialog.ADD_LIST_DIALOG_ID)
+            bundle.putString(AddEditDialog.DIALOG_MESSAGE, getString(R.string.dialog_message_list))
+            bundle.putString(AddEditDialog.EDITTEXT_HINT, getString(R.string.edittext_list_hint))
+            bundle.putString(AddEditDialog.POSITIVE_BTN_STRING, getString(R.string.add))
+
 
             addEditDialog.arguments = bundle
             addEditDialog.attachFragment(this)
@@ -123,9 +147,17 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         Log.d("ShoppingFr", "onPositiveClicked called. dialogId = $dialogId")
         when(dialogId) {
             ADD_LIST_DIALOG_ID -> {
-                val listName = bundle?.getString(AddEditDialog.LIST_NAME_ADD_DIALOG)
+                val listName = bundle?.getString(AddEditDialog.ELEMENT_STRING)
                 Log.d("ShoppingFr", "shopping list name = $listName")
                 listsViewModel.insertShoppingList(ShoppingList(listName!!))
+            }
+
+            EDIT_LIST_DIALOG_ID -> {
+                val listName = bundle?.getString(AddEditDialog.ELEMENT_STRING)
+                val listId = bundle?.getInt(AddEditDialog.ELEMENT_EDIT_ID)
+                listsViewModel.updateListName(listName!!, listId!!)
+                shoppingListAdapter.onLongShoppingList?.also { it.listName = listName!! }
+                shoppingListAdapter.updateListElement()
             }
         }
     }
@@ -133,7 +165,10 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
     override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_LIST_DIALOG_ID -> {
-                //do nothing
+                //nic nie rob
+            }
+            EDIT_LIST_DIALOG_ID -> {
+                //nic nie rob
             }
         }
     }

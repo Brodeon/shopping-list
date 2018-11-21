@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_ITEM_DIALOG_ID
+import com.brodeon.shoppinglist.AddEditDialog.Companion.EDIT_ITEM_DIALOG_ID
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,11 +32,14 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
+        val supportActionBar = (activity as AppCompatActivity).supportActionBar
 
         this.listId = arguments?.getInt(LIST_ID)
         val listName = arguments?.getString(LIST_NAME)
 
-        (activity as AppCompatActivity).supportActionBar?.title = listName
+        supportActionBar?.title = listName
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         return inflater.inflate(R.layout.fragment_shopping_items_list, container, false)
     }
 
@@ -52,6 +56,21 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
             when(item?.itemId) {
                 R.id.edit_item_cvi -> {
                     Log.d("ItemsFragment", "onContextItemSelected: onEditClicked, list name = ${it.itemText}")
+
+                    val addEditDialog = AddEditDialog()
+
+                    val bundle = Bundle()
+                    bundle.putInt(AddEditDialog.DIALOG_ID, AddEditDialog.EDIT_ITEM_DIALOG_ID)
+                    bundle.putString(AddEditDialog.DIALOG_MESSAGE, getString(R.string.dialog_message_edit_item))
+                    bundle.putString(AddEditDialog.EDITTEXT_HINT, getString(R.string.edittext_item_hint))
+                    bundle.putString(AddEditDialog.ELEMENT_STRING, it.itemText)
+                    bundle.putString(AddEditDialog.POSITIVE_BTN_STRING, getString(R.string.edit))
+                    bundle.putInt(AddEditDialog.ELEMENT_EDIT_ID, it.itemId)
+
+                    addEditDialog.arguments = bundle
+                    addEditDialog.attachFragment(this)
+
+                    addEditDialog.show(activity?.supportFragmentManager, null)
                 }
 
                 R.id.delete_item_cvi -> {
@@ -110,6 +129,10 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
 
                 val bundle = Bundle()
                 bundle.putInt(AddEditDialog.DIALOG_ID, AddEditDialog.ADD_ITEM_DIALOG_ID)
+                bundle.putString(AddEditDialog.DIALOG_MESSAGE, getString(R.string.dialog_message_item))
+                bundle.putString(AddEditDialog.EDITTEXT_HINT, getString(R.string.edittext_item_hint))
+                bundle.putString(AddEditDialog.POSITIVE_BTN_STRING, getString(R.string.add))
+
                 addEditDialog.arguments = bundle
 
                 addEditDialog.attachFragment(this)
@@ -132,9 +155,17 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
     override fun onPositiveClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_ITEM_DIALOG_ID -> {
-                val itemName = bundle?.getString(AddEditDialog.ITEM_NAME_ADD_DIALOG)
+                val itemName = bundle?.getString(AddEditDialog.ELEMENT_STRING)
                 Log.d("ItemsFragment", "item name = $itemName")
                 itemsViewModel.insertShoppingListItem(ShoppingListItem(itemName!!, false, listId!!))
+            }
+
+            EDIT_ITEM_DIALOG_ID -> {
+                val itemText = bundle?.getString(AddEditDialog.ELEMENT_STRING)
+                val itemId = bundle?.getInt(AddEditDialog.ELEMENT_EDIT_ID)
+                itemsViewModel.updateItemText(itemText!!, itemId!!)
+                shoppingItemsAdapter.onLongShoppingListItem?.also { it.itemText = itemText }
+                shoppingItemsAdapter.updateItem()
             }
         }
     }
@@ -142,7 +173,11 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
     override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_ITEM_DIALOG_ID -> {
-                //do nothing
+                //nic nie rob
+            }
+
+            EDIT_ITEM_DIALOG_ID -> {
+                //nic nie rob
             }
         }
     }

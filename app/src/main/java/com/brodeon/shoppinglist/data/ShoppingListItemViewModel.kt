@@ -23,4 +23,8 @@ class ShoppingListItemViewModel(application: Application) : AndroidViewModel(app
     fun deleteItem(shoppingListItem: ShoppingListItem) {
         repository.deleteItem(shoppingListItem)
     }
+
+    fun updateItemText(itemText: String, itemId: Int) {
+        repository.updateItemText(itemText, itemId)
+    }
 }

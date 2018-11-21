@@ -31,8 +31,8 @@ class ShoppingListsRVAdapter(private var listener: OnListLongClicked)
         notifyDataSetChanged()
     }
 
-    fun updateListElement(position: Int) {
-        notifyItemChanged(position)
+    fun updateListElement() {
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(viewHolder: ShoppingListsViewHolder, position: Int) {

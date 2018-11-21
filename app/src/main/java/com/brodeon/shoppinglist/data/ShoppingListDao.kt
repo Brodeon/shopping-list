@@ -27,4 +27,7 @@ interface ShoppingListDao {
     @Query("SELECT * FROM shopping_lists WHERE listId = :listId")
     fun getShoppingList(listId: Int): ShoppingList
 
+    @Query("UPDATE shopping_lists SET listName = :listName WHERE listId = :listId")
+    fun updateListName(listName: String, listId: Int)
+
 }

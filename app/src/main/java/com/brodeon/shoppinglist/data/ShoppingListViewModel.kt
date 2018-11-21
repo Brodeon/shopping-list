@@ -19,4 +19,8 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
     fun deleteList(shoppingList: ShoppingList) {
         repository.deleteList(shoppingList)
     }
+
+    fun updateListName(listName: String, listId: Int) {
+        repository.updateListName(listName, listId)
+    }
 }
