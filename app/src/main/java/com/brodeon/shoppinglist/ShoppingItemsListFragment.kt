@@ -154,6 +154,7 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
     }
 
     override fun onCheckboxChanged(position: Int, shoppingListItem: ShoppingListItem, isChecked: Boolean) {
+        Log.d("ItemsFragment", "onCheckboxChanged: ${shoppingListItem.itemText}: $isChecked")
         shoppingListItem.isBought = isChecked
         itemsViewModel.updateIsBoughtItem(shoppingListItem)
     }

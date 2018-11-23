@@ -14,7 +14,7 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
 
     private var itemsList: List<ShoppingListItem>? = null
     var onLongShoppingListItem: ShoppingListItem? = null
-
+    var checkedPosition: Int = -1
 
     interface OnItemClicked {
         fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem)
@@ -48,11 +48,15 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
             val item = it[position]
 
             viewHolder.isBoughtCheckBox.isChecked = item.isBought
+            viewHolder.isBoughtCheckBox.setOnCheckedChangeListener(null)
 
-            viewHolder.isBoughtCheckBox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-                Log.d("itemsAdapter", "isChecked = $isChecked")
-                listener.onCheckboxChanged(position, item, isChecked)
-            })
+            viewHolder.isBoughtCheckBox.setOnClickListener {
+                if (viewHolder.isBoughtCheckBox.isChecked) {
+                    listener.onCheckboxChanged(position, item, true)
+                } else {
+                    listener.onCheckboxChanged(position, item, false)
+                }
+            }
 
             viewHolder.itemDescription.text = item.itemText
 
