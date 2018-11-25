@@ -17,17 +17,26 @@ import com.brodeon.shoppinglist.data.ShoppingListItemViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_shopping_items_list.*
 
+/**
+ * Fragment zawierający listę zakupów
+ */
 class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClicked, AddEditDialog.OnDialogResponse, ItemsItemHelper.OnSwipeListener {
 
     private lateinit var shoppingItemsAdapter: ShoppingItemsRVAdapter
     private lateinit var itemsViewModel: ShoppingListItemViewModel
     private var listId: Int? = null
 
+    /**
+     * Zawiera zmienne które służą jako wartość klucza w Bundle
+     */
     companion object {
         const val LIST_ID: String = "listId"
         const val LIST_NAME: String = "listName"
     }
 
+    /**
+     * Pobiera dane z Bundle na temat id listy z której powinien pobrać listę zakupów
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,9 +61,16 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         hideFab()
     }
 
+    /**
+     * Obługuje kliknięcie w ContextMenu, które uzyskujemy poprzez dłuższe kliknięcie elementu w recycleView
+     */
     override fun onContextItemSelected(item: MenuItem?): Boolean {
         shoppingItemsAdapter.onLongShoppingListItem?.let {
             when(item?.itemId) {
+
+                /**
+                 * Kliknięte zostało "Edit"
+                 */
                 R.id.edit_item_cvi -> {
                     Log.d("ItemsFragment", "onContextItemSelected: onEditClicked, list name = ${it.itemText}")
 
@@ -74,6 +90,9 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
                     addEditDialog.show(activity?.supportFragmentManager, null)
                 }
 
+                /**
+                 * Kliknięte zostało "delete"
+                 */
                 R.id.delete_item_cvi -> {
                     Log.d("ItemsFragment", "onContextItemSelected: onDeleteClicked, list name = ${it.itemText}")
                     itemsViewModel.deleteItem(it)
@@ -86,6 +105,10 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         return super.onContextItemSelected(item)
     }
 
+    /**
+     * Konfiguruje RecycleView który wyświetla listę zakupów. Dodaje do RecycleView nasz itemsItemHelper który pozwala na
+     * swipowanie elementu listy
+     */
     private fun configureRecycleView() {
         val shoppingItemsRV = rv_shopping_items_list
         shoppingItemsAdapter = ShoppingItemsRVAdapter(this)
@@ -97,12 +120,19 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         ItemTouchHelper(itemsItemHelper).attachToRecyclerView(shoppingItemsRV)
     }
 
+    /**
+     * Wywołana gdy użytkownik wykonał swipe elementu listy
+     */
     override fun onSwipe(position: Int) {
         shoppingItemsAdapter.itemFromPosition(position)?.let {
             itemsViewModel.deleteItem(it)
         }
     }
 
+    /**
+     * Ustawia ViewModel, pobiera odpowienie elementy listy zakupów oraz obserwuję listę zakupów i informuje o zmianach
+     * tej listy
+     */
     private fun setViewModels() {
         itemsViewModel = ViewModelProviders.of(this).get(ShoppingListItemViewModel::class.java)
         itemsViewModel.shoppingListItems(listId!!).observe(this, Observer {
@@ -110,6 +140,9 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         })
     }
 
+    /**
+     * Wykonuje animację chowania FloatingActionButton
+     */
     private fun hideFab() {
         val fab = activity?.fab
         if (fab?.tag == FabState.VISIBLE) {
@@ -118,13 +151,23 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         }
     }
 
+    /**
+     * Tworzy OptionsMenu
+     */
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.list_items_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    /**
+     * Wywołuje odpowiedni kod po naciśnięciu home button, lub przycisku dodwania
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
+
+            /**
+             * Naciśnięty został przycisk dodania nowego elementu
+             */
             R.id.add_item_menu_item -> {
                 val addEditDialog = AddEditDialog()
 
@@ -140,6 +183,9 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
                 addEditDialog.show(activity?.supportFragmentManager, null)
             }
 
+            /**
+             * Naciśnięty został home button
+             */
             android.R.id.home -> {
                 val navgationFragmentView: View? = activity?.findViewById(R.id.nav_host_fragment)
                 Navigation.findNavController(navgationFragmentView!!).navigateUp()
@@ -149,16 +195,25 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Nic nie robi
+     */
     override fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem) {
         print(position)
     }
 
+    /**
+     * Wywołane gdy został naciśnięty checkbox
+     */
     override fun onCheckboxChanged(position: Int, shoppingListItem: ShoppingListItem, isChecked: Boolean) {
         Log.d("ItemsFragment", "onCheckboxChanged: ${shoppingListItem.itemText}: $isChecked")
         shoppingListItem.isBought = isChecked
         itemsViewModel.updateIsBoughtItem(shoppingListItem)
     }
 
+    /**
+     * Zajmuje się obsługą naciśniętego positiveButton w Dialogu
+     */
     override fun onPositiveClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_ITEM_DIALOG_ID -> {
@@ -177,6 +232,9 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
         }
     }
 
+    /**
+     * Zajmuje się obsługą naciśniętego negativeButton w Dialogu
+     */
     override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_ITEM_DIALOG_ID -> {

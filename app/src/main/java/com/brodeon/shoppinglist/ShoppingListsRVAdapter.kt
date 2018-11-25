@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brodeon.shoppinglist.data.ShoppingList
 import kotlinx.android.synthetic.main.shopping_list_layout.view.*
 
+/**
+ * Adapter obsługujący RecycleView zawierający listy list zakupów
+ */
 class ShoppingListsRVAdapter(private var listener: OnListLongClicked)
     : RecyclerView.Adapter<ShoppingListsRVAdapter.ShoppingListsViewHolder>() {
 
@@ -26,11 +29,18 @@ class ShoppingListsRVAdapter(private var listener: OnListLongClicked)
         return shoppingLists?.size ?: 0
     }
 
+    /**
+     * Metoda aktualizująca RecycleView, oraz obiekt w liście zakupów
+     */
     fun updateList(shoppingLists: List<ShoppingList>) {
         this.shoppingLists = shoppingLists
         notifyDataSetChanged()
     }
 
+
+    /**
+     * Metoda aktualizująca RecycleView
+     */
     fun updateListElement() {
         notifyDataSetChanged()
     }
@@ -53,21 +63,21 @@ class ShoppingListsRVAdapter(private var listener: OnListLongClicked)
 
     }
 
-    inner class ShoppingListsViewHolder : androidx.recyclerview.widget.RecyclerView.ViewHolder, View.OnCreateContextMenuListener {
+    inner class ShoppingListsViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
 
-        val listName: TextView
-        val view: View
+        val listName: TextView = itemView.listname_tv!!
+        val view: View = itemView
 
-        constructor(itemView: View) : super(itemView) {
-            listName = itemView.listname_tv!!
-            view = itemView
-
+        init {
             itemView.setOnCreateContextMenuListener(this)
         }
 
+        /**
+         * Tworzy ContextMenu który uzyskujemy poprzez dłuższe przyciśnięcie element listy
+         */
         override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-            menu?.add(Menu.NONE, R.id.edit_list_cvi, Menu.NONE, "Edit")
-            menu?.add(Menu.NONE, R.id.delete_list_cvi, Menu.NONE, "Delete")
+            menu?.add(Menu.NONE, R.id.edit_list_cvi, Menu.NONE, "Edit list")
+            menu?.add(Menu.NONE, R.id.delete_list_cvi, Menu.NONE, "Delete list")
         }
     }
 }

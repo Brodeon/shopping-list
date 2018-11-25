@@ -6,6 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
+/**
+ * Interfejs zawierający metody obsługi elementów listy zakupów
+ */
 @Dao
 interface ShoppingListItemDao {
 

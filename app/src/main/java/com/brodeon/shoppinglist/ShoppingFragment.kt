@@ -18,11 +18,17 @@ import com.brodeon.shoppinglist.data.ShoppingListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_shopping.*
 
+/**
+ * Fragment zajmujący się wyświetlaniem listy list zakupów
+ */
 class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, AddEditDialog.OnDialogResponse {
 
     private lateinit var shoppingListAdapter: ShoppingListsRVAdapter
     private lateinit var listsViewModel: ShoppingListViewModel
 
+    /**
+     * Ustawia tekst ActionBar, wyłącza przycisk home, inflatuje view
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,9 +42,16 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         return inflater.inflate(R.layout.fragment_shopping, container, false)
     }
 
+    /**
+     * Obługuje kliknięcie w ContextMenu, które uzyskujemy poprzez dłuższe kliknięcie elementu w recycleView
+    */
     override fun onContextItemSelected(item: MenuItem?): Boolean {
         shoppingListAdapter.onLongShoppingList?.let {
             when(item?.itemId) {
+
+                /**
+                 * Kliknięte zostało "Edit"
+                 */
                 R.id.edit_list_cvi -> {
                     Log.d("ShoppingFr", "onContextItemSelected: onEditClicked, list name = ${it.listName}")
 
@@ -57,6 +70,10 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 
                     addEditDialog.show(activity?.supportFragmentManager, null)
                 }
+
+                /**
+                 * Kliknięte zostało "delete"
+                 */
                 R.id.delete_list_cvi -> {
                     Log.d("ShoppingFr", "onContextItemSelected: onDeleteClicked, list name = ${it.listName}")
                     listsViewModel.deleteList(it)
@@ -77,6 +94,9 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         showFab()
     }
 
+    /**
+     * Konfiguruje RecycleView który wyświetla listę listy zakupów
+     */
     private fun configureRecycleView() {
         val shoppingListRV = rv_shopping_lists
         shoppingListAdapter = ShoppingListsRVAdapter(this)
@@ -90,6 +110,9 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         shoppingListRV.adapter = shoppingListAdapter
     }
 
+    /**
+     * Ustawia onClickListenera FloatingActionButton. FAB ten zajmuje się wywołaniem dialogu do dodawania listy zakupów
+     */
     private fun setActivityFabOnClickListener() {
         activity?.fab?.setOnClickListener {
             val addEditDialog = AddEditDialog()
@@ -108,6 +131,9 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         }
     }
 
+    /**
+     * Animuje ukazanie się FloatingActionButton
+     */
     private fun showFab() {
         val fab = activity?.fab
         if (fab?.tag == FabState.HIDDEN) {
@@ -116,6 +142,9 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         }
     }
 
+    /**
+     * Ustawia ViewModel który przechowuje listę listy zakupów.
+     */
     private fun setViewModels() {
         listsViewModel = ViewModelProviders.of(this).get(ShoppingListViewModel::class.java)
         listsViewModel.allShoppingLists().observe(this, Observer {
@@ -123,8 +152,11 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         })
     }
 
+    /**
+     * Zajmuje się dłuższym naciśnięciem na element RecycyleView. Aktualnie nie zaimplementowano funkcjolaności
+     */
     override fun onListLongClicked(position: Int, shoppingList: ShoppingList) {
-        print(position)
+        print(position) //nic nie rob
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -132,14 +164,19 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 //        super.onCreateOptionsMenu(menu, inflater)
 //    }
 
+    /**
+     * Wywołuje nowy fragment zawierający listę zakupów
+     */
     override fun onListClicked(shoppingList: ShoppingList, view: View) {
         val bundle = Bundle()
         bundle.putInt(ShoppingItemsListFragment.LIST_ID, shoppingList.listId)
         bundle.putString(ShoppingItemsListFragment.LIST_NAME, shoppingList.listName)
-
         Navigation.findNavController(view).navigate(R.id.toItems, bundle)
     }
 
+    /**
+     * Zajmuje się obsługą naciśniętego positiveButton w Dialogu
+     */
     override fun onPositiveClicked(dialogId: Int?, bundle: Bundle?) {
         Log.d("ShoppingFr", "onPositiveClicked called. dialogId = $dialogId")
         when(dialogId) {
@@ -159,6 +196,9 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
         }
     }
 
+    /**
+     * Zajmuje się obsługą naciśniętego negativeButton w Dialogu
+     */
     override fun onNegativeClicked(dialogId: Int?, bundle: Bundle?) {
         when(dialogId) {
             ADD_LIST_DIALOG_ID -> {

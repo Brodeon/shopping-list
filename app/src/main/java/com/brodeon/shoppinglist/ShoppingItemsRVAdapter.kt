@@ -1,20 +1,20 @@
 package com.brodeon.shoppinglist
 
-import android.util.Log
 import android.view.*
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brodeon.shoppinglist.data.ShoppingListItem
 import kotlinx.android.synthetic.main.shopping_list_item.view.*
 
+/**
+ * Adapter dla RecycleView zawierający listę zakupów
+ */
 class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
     : RecyclerView.Adapter<ShoppingItemsRVAdapter.ItemsViewHolder>(){
 
     private var itemsList: List<ShoppingListItem>? = null
     var onLongShoppingListItem: ShoppingListItem? = null
-    var checkedPosition: Int = -1
 
     interface OnItemClicked {
         fun onItemLongClicked(position: Int, shoppingListItem: ShoppingListItem)
@@ -30,15 +30,24 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
         return itemsList?.size ?: 0
     }
 
+    /**
+     * Metoda aktualizująca RecycleView, oraz obiekt w liście zakupów
+     */
     fun updateList(itemList: List<ShoppingListItem>) {
         this.itemsList = itemList
         notifyDataSetChanged()
     }
 
+    /**
+     * Metoda aktualizująca RecycleView
+     */
     fun updateItem() {
         notifyDataSetChanged()
     }
 
+    /**
+     * Zwraca obiekt z odpowiedniej pozycji listy obiektów
+     */
     fun itemFromPosition(position: Int): ShoppingListItem? {
         return itemsList?.get(position)
     }
@@ -67,23 +76,19 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
         }
     }
 
-    inner class ItemsViewHolder : androidx.recyclerview.widget.RecyclerView.ViewHolder, View.OnCreateContextMenuListener {
-        var view: View
-        var itemDescription: TextView
-        var isBoughtCheckBox: CheckBox
-        var foregroundView: View
-        var backgroundView: View
+    inner class ItemsViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
+        var view: View = itemView
+        var itemDescription: TextView = itemView.item_description_tv!!
+        var isBoughtCheckBox: CheckBox = itemView.is_bought_cb!!
+        var foregroundView: View = itemView.findViewById(R.id.foreground_view)
 
-        constructor(itemView: View) : super(itemView) {
-            view = itemView
-            itemDescription = itemView.item_description_tv!!
-            isBoughtCheckBox = itemView.is_bought_cb!!
-            foregroundView = itemView.findViewById(R.id.foreground_view)
-            backgroundView = itemView.findViewById(R.id.background_view)
-
+        init {
             view.setOnCreateContextMenuListener(this)
         }
 
+        /**
+         * Tworzy ContextMenu który uzyskujemy poprzez dłuższe przyciśnięcie element listy
+         */
         override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
             menu?.add(Menu.NONE, R.id.edit_item_cvi, Menu.NONE, "Edit item")
             menu?.add(Menu.NONE, R.id.delete_item_cvi, Menu.NONE, "Delete item")

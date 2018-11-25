@@ -5,11 +5,17 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Zajmuje się animacją Swipe
+ */
 class ItemsItemHelper(dragDirs: Int, swipeDirs: Int, onSwipeListener: OnSwipeListener) :
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
 
     private var listener: OnSwipeListener = onSwipeListener
 
+    /**
+     * Interfejs zawierający metodę onSwipe która zostaje wywołana gdy została wykonana animacja Swipe
+     */
     interface OnSwipeListener {
         fun onSwipe(position: Int)
     }
@@ -64,6 +70,9 @@ class ItemsItemHelper(dragDirs: Int, swipeDirs: Int, onSwipeListener: OnSwipeLis
             actionState, isCurrentlyActive)
     }
 
+    /**
+     * Metoda ta zostaje wywołana gdy została zakończona animacja swipe
+     */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         listener.onSwipe(viewHolder.adapterPosition)
     }
