@@ -1,7 +1,9 @@
 package com.brodeon.shoppinglist
 
+import android.animation.ObjectAnimator
 import android.view.*
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.brodeon.shoppinglist.data.ShoppingListItem
@@ -55,20 +57,14 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
     override fun onBindViewHolder(viewHolder: ItemsViewHolder, position: Int) {
         itemsList?.let {
             val item = it[position]
+            val imageResourceId: Int = if (item.isBought) R.drawable.checkbox_checked else R.drawable.checkbox_unchecked
+            viewHolder.isBoughtCheckBox.setImageResource(imageResourceId)
 
-            viewHolder.isBoughtCheckBox.isChecked = item.isBought
-            viewHolder.isBoughtCheckBox.setOnCheckedChangeListener(null)
-
-            viewHolder.isBoughtCheckBox.setOnClickListener {
-                if (viewHolder.isBoughtCheckBox.isChecked) {
-                    listener.onCheckboxChanged(position, item, true)
-                } else {
-                    listener.onCheckboxChanged(position, item, false)
-                }
+            viewHolder.view.setOnClickListener {
+                listener.onCheckboxChanged(position, item, item.isBought)
             }
 
             viewHolder.itemDescription.text = item.itemText
-
             viewHolder.view.setOnLongClickListener {
                 onLongShoppingListItem = item
                 false
@@ -79,7 +75,7 @@ class ShoppingItemsRVAdapter(private var listener: OnItemClicked)
     inner class ItemsViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
         var view: View = itemView
         var itemDescription: TextView = itemView.item_description_tv!!
-        var isBoughtCheckBox: CheckBox = itemView.is_bought_cb!!
+        var isBoughtCheckBox: ImageView = itemView.checkbox_image!!
         var foregroundView: View = itemView.findViewById(R.id.foreground_view)
 
         init {

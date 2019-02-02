@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brodeon.shoppinglist.AddEditDialog.Companion.ADD_LIST_DIALOG_ID
@@ -126,7 +127,6 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
 
             addEditDialog.arguments = bundle
             addEditDialog.attachFragment(this)
-
             addEditDialog.show(activity?.supportFragmentManager, null)
         }
     }
@@ -148,7 +148,7 @@ class ShoppingFragment : Fragment(),  ShoppingListsRVAdapter.OnListLongClicked, 
     private fun setViewModels() {
         listsViewModel = ViewModelProviders.of(this).get(ShoppingListViewModel::class.java)
         listsViewModel.allShoppingLists().observe(this, Observer {
-            shoppingListAdapter.updateList(it!!)
+            shoppingListAdapter.updateList(it)
         })
     }
 

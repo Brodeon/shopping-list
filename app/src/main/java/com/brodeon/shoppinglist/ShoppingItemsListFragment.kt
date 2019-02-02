@@ -124,7 +124,7 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
      * Wywołana gdy użytkownik wykonał swipe elementu listy
      */
     override fun onSwipe(position: Int) {
-        shoppingItemsAdapter.itemFromPosition(position)?.let {
+            shoppingItemsAdapter.itemFromPosition(position)?.let {
             itemsViewModel.deleteItem(it)
         }
     }
@@ -207,7 +207,7 @@ class ShoppingItemsListFragment : Fragment(), ShoppingItemsRVAdapter.OnItemClick
      */
     override fun onCheckboxChanged(position: Int, shoppingListItem: ShoppingListItem, isChecked: Boolean) {
         Log.d("ItemsFragment", "onCheckboxChanged: ${shoppingListItem.itemText}: $isChecked")
-        shoppingListItem.isBought = isChecked
+        shoppingListItem.isBought = !isChecked
         itemsViewModel.updateIsBoughtItem(shoppingListItem)
     }
 
